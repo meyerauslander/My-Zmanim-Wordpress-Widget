@@ -1,12 +1,11 @@
 <?php
 /**
- * Plugin Name:   Zmanim Widget Plugin
- * Plugin URI:    
+ * Plugin Name:   My Zmanim Widget
+ * Plugin URI:    https://treestonemedia.com/
  * Description:   Adds a widget option in the admin area.  When added, allows the admin to enter comments that will show up on the user page.  Each comment includes a zman from drop down list of zmanim.
  *                
  * Version:       1.0
- * Author:        Meyer Auslander
- * Author URI:    
+ * Author:        Meyer Auslander  
  */
 
 //include the file that defines the maus_Zmanim_API class
