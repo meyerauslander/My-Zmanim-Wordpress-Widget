@@ -37,8 +37,8 @@ class maus_Zmanim_Widget extends maus_InputForm_Widget{
             switch($action) {
                 case 'add';
                     echo "You clicked add comment";
-                    echo $total_comments +=1;
-                    echo $current_comment=$total_comments;
+                    $total_comments +=1;
+                    $current_comment=$total_comments;
                 break; 
                     
                 case 'previous';
