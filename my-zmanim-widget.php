@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name:   My Zmanim Widget Plugin
- * Plugin URI:    www.placeholder.org/nowhere
+ * Plugin URI:    https://jonpenland.com
  * Description:   Adds a widget option in the admin area.  When added, allows the admin to enter comments that will show up on the user page.
  * Version:       1.0
  * Author:        Meyer Auslander
- * Author URI:    www.placeholder.org/nowhere
+ * Author URI:    https://jonpenland.com
  */
 
 //include the file that defines the maus_Zmanim_API class
