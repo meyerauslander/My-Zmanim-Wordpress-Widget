@@ -1,6 +1,6 @@
 # My Zmanim Widget
 This is a WordPress plugin that will allow the admin to enter comments to appear on the user page.  Each comment includes a zman which is selected by the admin.
-For Example "Today Shachris will be at --Sunrise--.  
+For Example "Today Shachris will be at (Sunrise).  
              Brachos will start 30 minutes beforehand."
 
 I wrote this plugin as an exercise creating wordpress widget that accepts a variable number of input comments from the admin and displays them to the end user.  I also wanted to demonstrate the ability of the widget to pull information from other websites through their API (Application Interface).    
@@ -13,7 +13,7 @@ Upon adding a My Zmanim Widget to your site you'll have the option to enter the 
 Enter your personal information and click 'save'.  Now you’re ready to enter as many comments as you want!
 
 # Usage
-* After saving your "My Zmanim" name and key can enter your first comment.  
+* After saving your "My Zmanim" name and key, you can enter your first comment.  
 * To add your next comment, click on "Add New".  To view or edit a previous comment, click on "Edit Previous" etc.  
 * Be sure to save your changes before clicking to a different comment. 
 
