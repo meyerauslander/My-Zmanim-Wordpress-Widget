@@ -1,13 +1,12 @@
 <?php
 /**
- * Plugin Name:   My Zmanim Widget
- * Plugin URI:    www.placeholder.org/nowhere
- * Description:   Adds a widget option in the admin area.  When added, allows the admin to enter comments that will show up on the user page.  Each comment includes a zman from drop down list of zmanim.
- *                
- * Version:       1.0
- * Author:        Meyer Auslander
- * Author URI:    www.placeholder.org/nowhere
- * License: GPL2
+ * Plugin Name:     My Zmanim Widget
+ * Plugin URI:      www.placeholder.org/nowhere
+ * Description:     Adds a widget option in the admin area.  When added, allows the admin to enter comments that will show up on the user page.  Each comment includes a zman from drop down list of zmanim.       
+ * Version:         1.0
+ * Author:          Meyer Auslander
+ * Author URI:      www.placeholder.org/nowhere
+ * License:         GPL2
  */
 
 //include the file that defines the maus_Zmanim_API class
