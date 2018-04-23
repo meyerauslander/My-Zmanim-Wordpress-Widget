@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:   Example Zmanim Widget
+ * Plugin Name:   Example Widget
  * Plugin URI:    www.placeholder.org/nowhere
  * Description:   Adds a widget option in the admin area.  When added, allows the admin to enter comments that will show up on the user page.  Each comment includes a zman from drop down list of zmanim.    
  * Version:       1.0
