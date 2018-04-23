@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:   My Zmanim Widget Plugin
+ * Plugin Name:   Example Widget Plugin
  * Plugin URI:    https://jonpenland.com
  * Description:   Adds a widget option in the admin area.  When added, allows the admin to enter comments that will show up on the user page.
  * Version:       1.0
