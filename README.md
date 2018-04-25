@@ -9,11 +9,11 @@ I wrote this plugin as an exercise creating wordpress widget that accepts a vari
 Download this repo as a zip and install like any other WP plugin
 
 # Setup
-Upon adding a My Zmanim Widget to your site you'll have the option to enter the title of your widget, username (to My Zmanim), password/key (to My Zmanim), and time zone (for My Zmanim.  If you don't know it just leave it as the default of -5.0).  
-Enter your personal information and click 'save'.  Now you’re ready to enter as many comments as you want!
+1. Go To the the "Admin Dashboard".  Then select the "My Zmanim login info" screen under the   "Settings" Menu.
+2. Enter your user Id and Key.  clicking "save" will cause your information to be validated and saved to the database.  Repeat untill the validation is successful.
+3. Add a My Zmanim Widget to your site. Now you’re ready to enter as many comments as you want!
 
 # Usage
-* After saving your "My Zmanim" name and key, you can enter your first comment.  
 * To add your next comment, click on "Add New".  To view or edit a previous comment, click on "Edit Previous" etc.  
 * Be sure to save your changes before clicking to a different comment. 
 

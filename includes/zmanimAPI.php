@@ -19,4 +19,11 @@ class maus_Zmanim_API{
     public function getZmanim($zipcode=''){
         //Override this function in the inheriting class
     }
+    
+    //attempt to make a call to the Zmanim API 
+    //usage: try{ call this function } catch{ actions upon error } 
+    //returns any error message returned by the Zmanim API
+    public function validateUser(){
+        //Override this function in the inheriting class 
+    }
 }

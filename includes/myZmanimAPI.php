@@ -7,7 +7,7 @@ class maus_MyZmanim_API extends maus_Zmanim_API{
     protected $clientTimeZone,$locationID;  //properties unique to my zmanim api
     
     //re client's time zone: Optional,is sometimes used to resolve ambiguous queries. -5.0 for Eastern standard time
-    public function __construct($in_user, $in_key, $in_endpoint, $in_clientTimeZone){ 
+    public function __construct($in_user, $in_key, $in_endpoint, $in_clientTimeZone=''){ 
         //set the zmanim output array
          $this->requested_zman_output_array=array("Dawn72" => "Dawn(Alos HaShachar)" , 
                                      "YakirDefault" => "Earliest Tallis",
@@ -54,15 +54,32 @@ class maus_MyZmanim_API extends maus_Zmanim_API{
         $wcfClient = new SoapClient($this->endpoint);
         $params = array("User"=>$this->user, "Key"=>$this->key, "Coding"=>"PHP", "TimeZone"=>$this->clientTimeZone, "Query"=>$pPostalCode);
         $response = $wcfClient->__soapCall("SearchPostal", array('parameters'=>array("Param"=>$params)));
+        
         $outterArray = ((array)$response);
         $innerArray = ((array)$outterArray['SearchPostalResult']);
-
         if ($innerArray["ErrMsg"] != NULL) {
             echo "Error: ";
             echo $innerArray["ErrMsg"];
             return;
         }
         $this->locationID=$innerArray["LocationID"];
+    }
+    
+    //attempt to make a call to the My Zmanim API 
+    //usage: try{ call this function } catch{ actions upon error } 
+    //returns any error message returned by My Zmanim
+    public function validateUser(){
+        $wcfClient = new SoapClient($this->endpoint);
+        $params = array("User"=>$this->user, "Key"=>$this->key, "Coding"=>"PHP", 
+                        "TimeZone"=>$this->clientTimeZone, "Query"=>"44092"); //any valid zipcode will work for this
+        $response = $wcfClient->__soapCall("SearchPostal", array('parameters'=>array("Param"=>$params)));
+
+        $outterArray = ((array)$response);
+        $innerArray = ((array)$outterArray['SearchPostalResult']);
+        if ($innerArray["ErrMsg"] != NULL) {
+            return $innerArray["ErrMsg"];
+        }
+        return null; //valided successfully!
     }
 }
 ?>

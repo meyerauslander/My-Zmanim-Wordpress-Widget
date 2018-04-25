@@ -15,7 +15,7 @@ $include_path = "$dir/includes/";
 include "$include_path" . "zmanimAPI.php"; //base zmanim api class definition
 include "$include_path" . "myZmanimAPI.php";  //"My Zmanim" api class
 include "$include_path" . "inputFormWidget.php"; //base class for widgets that accept and display information entered by the admin
-     
+include "$include_path" . "zmanim-admin.php";    
 
 //Adds the functionality of connecting to a zmanim API and display zmanim-based comments
 class maus_Zmanim_Widget extends maus_InputForm_Widget{  
@@ -65,12 +65,10 @@ class maus_Zmanim_Widget extends maus_InputForm_Widget{
         echo "<p>"; //The form info should be in a <p> tag.
         $this->makeTextInput("title","Enter the Title to appear to the user:",$title);
 
-        //Give input form to enter the user, key, endpoint, and timezone if it's the first time through
-        if (empty($instance['user'])){ 
-            $this->makeTextInput("user","Enter your username/number:","");
-            $this->makeTextInput("key","Enter your user password/key:","");
-            $this->makeTextInput("endpoint","Enter your user endpoint:","https://api.myzmanim.com/engine1.svc?wsdl");   
-            $this->makeTextInput("timezone","Enter your timezone (ie. -5.0):","-5.0"); 
+        //Tell the user to enter valid user and key in the settings menu
+        if (get_option('zman_status')!="Validated"){ 
+            echo _e("You cannot access the zmanim API until you enter a vaild username and password<br>");
+            echo "To enter your information, go to the My Zmanim Login Info screen (under the settings menu of the admin dashboard).";
         }//close the first-time-through if statement
         else{ //if user name was already entered then create comments
             $this->makeTextInput("current_comment","Current Comment being displayed",$current_comment);
@@ -121,14 +119,21 @@ class maus_Zmanim_Widget extends maus_InputForm_Widget{
     // Create the widget output.  
     //widget() function
      public function widget( $args, $instance ) {
+        $title = apply_filters( 'widget_title', $instance[ 'title' ] );
+         
         //Get times from Zmanim server
+        $user=get_option('zman_api_user');
+        $key=get_option('zman_password');
+        $endpoint=get_option('zman_url');
+        $status = get_option('zman_status');
+         
         $zipcode=$instance['zipcode']; //don't do it if there's no zipcode entered 
-        if (!empty($zipcode)){
-            $zmanimAPI=new maus_MyZmanim_API($instance['user'],$instance['key'], $instance['endpoint'],$instance['timezone']);
+        if (!empty($zipcode) && ($status == "Validated")){
+            //$zmanimAPI=new maus_MyZmanim_API($instance['user'],$instance['key'], $instance['endpoint'],$instance['timezone']);
+            $zmanimAPI=new maus_MyZmanim_API($user,$key,$endpoint);
             $zmanimAPI->getZmanim("$zipcode");
         
             //prepare to produce the output
-            $title = apply_filters( 'widget_title', $instance[ 'title' ] );
             $current_comment=$instance['current_comment'];
             $total_comments=$instance['total_comments'];
 
@@ -145,7 +150,17 @@ class maus_Zmanim_Widget extends maus_InputForm_Widget{
                 echo $text_before_zman . " " . $this->formatZman($zmanimAPI->zman["$zman_options"]) ." <br>". $text_after_zman . "<br><br>" ;
             }            
             echo $args['after_widget'];
-        } else echo "Error: Zipcode field is empty.";
+        } else { //there is a problem
+            //Output the title
+            echo $args['before_widget'] . $args['before_title'] .  $title . $args['after_title'];
+            
+            if (empty($zipcode)) echo "Error: Zipcode field is empty.<br>";
+            if ($status != "Validated") { 
+                echo "Error: You cannot access the zmanim API until you enter a vaild username and password.<br>";
+                echo "To enter your information, go to the 'My Zmanim Login' Info screen (under the settings menu of the admin dashboard).";
+            }
+            echo $args['after_widget'];
+        }
     } //end of function widget()
 } //close the maus_Zmanim_Widget class
 
