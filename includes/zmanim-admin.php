@@ -27,7 +27,8 @@ function maus_zmanimAPI_plugin_options() {
 
     //retreive the current validation status
     $status = get_option('zman_status');
-    
+    $url = get_option('zman_url');
+    $url = (empty($url)) ? "https://api.myzmanim.com/engine1.svc?wsdl" : $url; 
     //Check for proper server settings
     if (!(isset($_GET['status']))){ //only display this initially
         //check if SOAP enabled
@@ -91,6 +92,7 @@ function maus_zmanimAPI_plugin_options() {
         }
     }
 
+    
 	//build the form with the elements
 	//default WP classes were used for ease
 	?>
@@ -101,7 +103,7 @@ function maus_zmanimAPI_plugin_options() {
         <h3><?php _e( "My Zmanim Info", "zmanim-api" ); ?></h3>
         <p>
             <label><?php _e( "Zmanim API URL (endpoint):", "zmanim-api" ); ?></label>
-            <input class="regular-text" type="text" name="zman_url" value="<?php echo get_option( 'zman_url' ); ?>"/>
+            <input class="regular-text" type="text" name="zman_url" value="<?php echo $url; ?>"/>
         </p>
         <p>
             <label><?php _e( "Zmanim API User:", "zmanim-api" ); ?></label>
