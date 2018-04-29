@@ -25,30 +25,47 @@ class maus_MyZmanim_API extends maus_Zmanim_API{
     
      //Make the api call to populate the zman, place, and time arrays
     public function getZmanim($zipcode=''){
-        //Set postalID.  If no zipcode is passed in then the postalID must be set by the user
-        if ($zipcode!=''){
-             $this->findPostal($zipcode); 
-        }
-        //Instantiate $APIcaller and prepare parameters:
-        $APIcaller = new SoapClient($this->endpoint);
-        $params = array("User"=>$this->user
-                        , "Key"=>$this->key
-                        , "Coding"=>"PHP"
-                        , "Language"=>"en"            
-                        , "LocationID"=>$this->locationID
-                        , "InputDate"=>date("c")
-                        );
-        //Call API:
-        $response = $APIcaller->__soapCall("GetDay", array('parameters'=>
-            array("Param"=>$params)));
+       $transData = get_transient("$zipcode"); //check if the transient is already cached
+	   if ($transData===false) { //it isn't cached
+            //Set postalID.  If no zipcode is passed in then the postalID must be set by the user
+            if ($zipcode!=''){
+                 $this->findPostal($zipcode); 
+            }
+            //Instantiate $APIcaller and prepare parameters:
+            $APIcaller = new SoapClient($this->endpoint);
+            $params = array("User"=>$this->user
+                            , "Key"=>$this->key
+                            , "Coding"=>"PHP"
+                            , "Language"=>"en"            
+                            , "LocationID"=>$this->locationID
+                            , "InputDate"=>date("c")
+                            );
+            //Call API:
+            $response = $APIcaller->__soapCall("GetDay", array('parameters'=>
+                array("Param"=>$params)));
 
-        $outterArray = ((array)$response);
-        $innerArray = ((array)$outterArray['GetDayResult']);
-        
-        $this->time  = ((array)$innerArray['Time']);
-        $this->place = ((array)$innerArray['Place']);	
-        $this->zman  = ((array)$innerArray['Zman']);
-    }
+            $outterArray = ((array)$response);
+            $innerArray = ((array)$outterArray['GetDayResult']);
+
+            $this->time  = ((array)$innerArray['Time']);
+            $this->place = ((array)$innerArray['Place']);	
+            $this->zman  = ((array)$innerArray['Zman']);
+
+            //set transient for this zipcode
+                //calculate time till midnight at this zipcode
+                $hour = date("G", strtotime($this->zman['CurrentTime']));
+                $minute = date("i", strtotime($this->zman['CurrentTime']));
+                $secondsTill = (24 - $hour - 1)*60*60 + (60-$minute)*60;  
+            set_transient("$zipcode", $response, $secondsTill);
+       }else{ //set the arrays from the transient data
+            $outterArray = ((array)$transData);
+            $innerArray = ((array)$outterArray['GetDayResult']);
+
+            $this->time  = ((array)$innerArray['Time']);
+            $this->place = ((array)$innerArray['Place']);	
+            $this->zman  = ((array)$innerArray['Zman']); 
+       }
+    } //end of getZmanim function
     
     public function findPostal($pPostalCode) {
         $wcfClient = new SoapClient($this->endpoint);

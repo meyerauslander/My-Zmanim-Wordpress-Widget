@@ -97,14 +97,6 @@ class maus_Zmanim_Widget extends maus_InputForm_Widget{
         $current_comment=strip_tags( $new_instance[ 'current_comment' ] );            
         $instance = $old_instance;
         $instance[ 'title' ] = strip_tags( $new_instance[ 'title' ] );
-        
-        if (empty($new_instance['current_comment'])){
-            $instance[ 'user' ] = strip_tags( $new_instance[ 'user' ] );
-            $instance[ 'key' ] = strip_tags( $new_instance[ 'key' ] );
-            $instance[ 'endpoint' ] = strip_tags( $new_instance[ 'endpoint' ] );
-            $instance[ 'timezone' ] = strip_tags( $new_instance[ 'timezone' ] );
-        }
-        
         $instance[ 'current_comment' ] = strip_tags( $new_instance[ 'current_comment' ] );
         $instance[ 'total_comments' ] = strip_tags( $new_instance[ 'total_comments' ] );
         $instance[ "text_before_zman$current_comment" ] = strip_tags( $new_instance[ "text_before_zman$current_comment" ] );
@@ -114,13 +106,12 @@ class maus_Zmanim_Widget extends maus_InputForm_Widget{
         
         return $instance;
     }
-
     
-    // Create the widget output.  
+    // echo the widget output.
     //widget() function
-     public function widget( $args, $instance ) {
+    public function widget( $args, $instance ) {
+        $output = ''; //initialize output variable to which to add all the widget output
         $title = apply_filters( 'widget_title', $instance[ 'title' ] );
-         
         //Get times from Zmanim server
         $user=get_option('zman_api_user');
         $key=get_option('zman_password');
@@ -140,27 +131,28 @@ class maus_Zmanim_Widget extends maus_InputForm_Widget{
             date_default_timezone_set('UTC');	//Defines behaviour of strtotime().
 
             //Output the title
-            echo $args['before_widget'] . $args['before_title'] .  $title . $args['after_title'];
+            $output .= $args['before_widget'] . $args['before_title'] .  $title . $args['after_title'];
 
             //Ouput all the comments
             for ($i = 1; $i <= $total_comments; $i++) {
                 $text_before_zman=$instance["text_before_zman$i"];
                 $text_after_zman=$instance["text_after_zman$i"];
-                $zman_options=$instance["zman_options$i"];      
-                echo $text_before_zman . " " . $this->formatZman($zmanimAPI->zman["$zman_options"]) ." <br>". $text_after_zman . "<br><br>" ;
+                $zman_options=$instance["zman_options$i"];   
+                $output .= $text_before_zman . " " . $this->formatZman($zmanimAPI->zman["$zman_options"]) ." <br>". $text_after_zman . "<br><br>" ;
             }            
-            echo $args['after_widget'];
+            $output .= $args['after_widget'];
         } else { //there is a problem
             //Output the title
-            echo $args['before_widget'] . $args['before_title'] .  $title . $args['after_title'];
+            $output .= $args['before_widget'] . $args['before_title'] .  $title . $args['after_title'];
             
-            if (empty($zipcode)) echo "Error: Zipcode field is empty.<br>";
+            if (empty($zipcode)) $output .= "Error: Zipcode field is empty.<br>";
             if ($status != "Validated") { 
-                echo "Error: You cannot access the zmanim API until you enter a vaild username and password.<br>";
-                echo "To enter your information, go to the 'My Zmanim Login' Info screen (under the settings menu of the admin dashboard).";
+                $output .= "Error: You cannot access the zmanim API until you enter a vaild username and password.<br>";
+                $output .= "To enter your information, go to the 'My Zmanim Login' Info screen (under the settings menu of the admin dashboard).";
             }
-            echo $args['after_widget'];
+            $output .= $args['after_widget'];
         }
+        echo $output;
     } //end of function widget()
 } //close the maus_Zmanim_Widget class
 
