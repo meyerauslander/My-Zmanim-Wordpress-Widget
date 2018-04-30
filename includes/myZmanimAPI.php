@@ -13,6 +13,7 @@ class maus_MyZmanim_API extends maus_Zmanim_API{
                                      "YakirDefault" => "Earliest Tallis",
                                      "SunriseDefault"=> "Sunrise",
                                      "ShemaMA72"=>"Shema MA",
+                                     "ShemaGra"=>"Shema GRA",              
                                      "SunsetDefault"=>"Sunset");
         
         //set user specific attributes
@@ -67,6 +68,8 @@ class maus_MyZmanim_API extends maus_Zmanim_API{
        }
     } //end of getZmanim function
     
+    
+    
     public function findPostal($pPostalCode) {
         $wcfClient = new SoapClient($this->endpoint);
         $params = array("User"=>$this->user, "Key"=>$this->key, "Coding"=>"PHP", "TimeZone"=>$this->clientTimeZone, "Query"=>$pPostalCode);
@@ -75,9 +78,7 @@ class maus_MyZmanim_API extends maus_Zmanim_API{
         $outterArray = ((array)$response);
         $innerArray = ((array)$outterArray['SearchPostalResult']);
         if ($innerArray["ErrMsg"] != NULL) {
-            echo "Error: ";
-            echo $innerArray["ErrMsg"];
-            return;
+            return $innerArray["ErrMsg"];
         }
         $this->locationID=$innerArray["LocationID"];
     }

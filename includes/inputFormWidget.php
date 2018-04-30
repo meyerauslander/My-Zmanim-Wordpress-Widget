@@ -29,9 +29,12 @@ class maus_InputForm_Widget extends WP_Widget{
         echo "<label for='" . $this->get_field_id("$name") . "'>$label</label>";    
     }
     
-    //Convert date value to a string: for use in in makeing the display of the "widget" function
-    public function formatZman($aZman,$when="was"){
-	   return ($when=="was") ? date("g:i a", strtotime($aZman)): date('g:i:s a', strtotime($aZman));
+    //Convert date string to display string: (for use in in makeing the display of the "widget" function)
+    //add the offset # of minutes to the zman
+    public function formatZman($aZman,$offset=0,$when="was"){
+        //apply the offset
+        $offsetTime=strtotime($aZman)+$offset*60;
+        return ($when=="was") ? date("g:i a", $offsetTime): date('g:i a', $offsetTime);
     }
 }
 ?>

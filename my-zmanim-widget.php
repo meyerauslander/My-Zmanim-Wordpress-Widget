@@ -2,7 +2,7 @@
 /**
  * Plugin Name:   My Zmanim Widget
  * Plugin URI:    none
- * Description:   Adds a widget option in the admin area.  When added, allows the admin to enter comments that will show up on the user page.  Each comment includes a zman from drop down list of zmanim.    
+ * Description:   Adds a widget option in the admin area.  When added, allows the admin to enter comments that will show up on the user page.  Each comment includes a zman from drop down list of zmanim.  Also includes a WordPress "shortcode" function for displaying a requested zman.    
  * Version:       1.0
  * Author:        Meyer Auslander
  * Author URI:    none
@@ -16,6 +16,7 @@ include "$include_path" . "zmanimAPI.php"; //base zmanim api class definition
 include "$include_path" . "myZmanimAPI.php";  //"My Zmanim" api class
 include "$include_path" . "inputFormWidget.php"; //base class for widgets that accept and display information entered by the admin
 include "$include_path" . "zmanim-admin.php";    
+include "$include_path" . "display_zman.php";
 
 //Adds the functionality of connecting to a zmanim API and display zmanim-based comments
 class maus_Zmanim_Widget extends maus_InputForm_Widget{  
@@ -161,5 +162,6 @@ function maus_register_zmanim_widget() {
   register_widget( 'maus_Zmanim_Widget' );
 }
 add_action( 'widgets_init', 'maus_register_zmanim_widget' );
+
 
 ?>
