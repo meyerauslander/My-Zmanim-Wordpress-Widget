@@ -15,12 +15,13 @@ $include_path = "$dir/includes/";
 include "$include_path" . "zmanimAPI.php"; //base zmanim api class definition
 include "$include_path" . "myZmanimAPI.php";  //"My Zmanim" api class
 include "$include_path" . "inputFormWidget.php"; //base class for widgets that accept and display information entered by the admin
-include "$include_path" . "zmanim-admin.php";    
-include "$include_path" . "display_zman.php";
+include "$include_path" . "zmanim-admin.php";    //page in admin for "My Zmanim login info"
+include "$include_path" . "display_zman.php";    //shortcode function
 
 //Adds the functionality of connecting to a zmanim API and display zmanim-based comments
 class maus_Zmanim_Widget extends maus_InputForm_Widget{  
     public function __construct() {
+        $this->default_zman_option="Sunrise"; //needed in case the zman_option index is empty when the output is created
         $widget_options = array( 'classname' => 'maus_Zmanim_widget', 'description' => 'Enter comments containing today\'s zmanim.  Each comment includes a zman from drop down list of zmanim.' );
         parent::__construct( 'zmanim_widget', 'Zmanim Widget', $widget_options );
     }
@@ -133,19 +134,23 @@ class maus_Zmanim_Widget extends maus_InputForm_Widget{
 
             //Output the title
             $output .= $args['before_widget'] . $args['before_title'] .  $title . $args['after_title'];
-
             //Ouput all the comments
             for ($i = 1; $i <= $total_comments; $i++) {
                 $text_before_zman=$instance["text_before_zman$i"];
                 $text_after_zman=$instance["text_after_zman$i"];
-                $zman_options=$instance["zman_options$i"];   
-                $output .= $text_before_zman . " " . $this->formatZman($zmanimAPI->zman["$zman_options"]) ." <br>". $text_after_zman . "<br><br>" ;
+                
+                //set the zman option to the desired selection. If empty then use the default option. 
+                if (array_key_exists("zman_options$i", $instance) && $instance["zman_options$i"]!='') { 
+                    $zman_option=$instance["zman_options$i"]; 
+                }else{ //set the option to the default_zman_option
+                    $zman_option=array_search("$this->default_zman_option",$zmanimAPI->requested_zman_output_array); 
+                }
+                $output .= $text_before_zman . " " . $this->formatZman($zmanimAPI->zman["$zman_option"]) ." <br>". $text_after_zman . "<br><br>" ;
             }            
             $output .= $args['after_widget'];
         } else { //there is a problem
             //Output the title
             $output .= $args['before_widget'] . $args['before_title'] .  $title . $args['after_title'];
-            
             if (empty($zipcode)) $output .= "Error: Zipcode field is empty.<br>";
             if ($status != "Validated") { 
                 $output .= "Error: You cannot access the zmanim API until you enter a vaild username and password.<br>";

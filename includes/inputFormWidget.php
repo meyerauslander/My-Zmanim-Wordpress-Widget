@@ -34,7 +34,7 @@ class maus_InputForm_Widget extends WP_Widget{
     public function formatZman($aZman,$offset=0,$when="was"){
         //apply the offset
         $offsetTime=strtotime($aZman)+$offset*60;
-        return ($when=="was") ? date("g:i a", $offsetTime): date('g:i a', $offsetTime);
+        return ($when=="was") ? date("g:i a", $offsetTime): date('g:i:s a', $offsetTime);
     }
 }
 ?>

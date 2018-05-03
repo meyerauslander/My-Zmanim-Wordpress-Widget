@@ -99,5 +99,5 @@ class maus_MyZmanim_API extends maus_Zmanim_API{
         }
         return null; //valided successfully!
     }
-}
+}  // end of maus_MyZmanim_API class
 ?>
