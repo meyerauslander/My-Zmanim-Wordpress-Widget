@@ -26,7 +26,7 @@ class maus_MyZmanim_API extends maus_Zmanim_API{
     
      //Make the api call to populate the zman, place, and time arrays
     public function getZmanim($zipcode=''){
-       $transData = get_transient("$zipcode"); //check if the transient is already cached
+       $transData = get_transient("maus_zmanim_zipcode$zipcode"); //check if the transient is already cached
 	   if ($transData===false) { //it isn't cached
             //Set postalID.  If no zipcode is passed in then the postalID must be set by the user
             if ($zipcode!=''){
@@ -56,8 +56,8 @@ class maus_MyZmanim_API extends maus_Zmanim_API{
                 //calculate time till midnight at this zipcode
                 $hour = date("G", strtotime($this->zman['CurrentTime']));
                 $minute = date("i", strtotime($this->zman['CurrentTime']));
-                $secondsTill = (24 - $hour - 1)*60*60 + (60-$minute)*60;  
-            set_transient("$zipcode", $response, $secondsTill);
+                $secondsTill = (24 - $hour - 1)*60*60 + (60-$minute)*60; 
+            set_transient("maus_zmanim_zipcode$zipcode", $response, $secondsTill);
        }else{ //set the arrays from the transient data
             $outterArray = ((array)$transData);
             $innerArray = ((array)$outterArray['GetDayResult']);

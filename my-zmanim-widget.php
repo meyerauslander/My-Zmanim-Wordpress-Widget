@@ -18,17 +18,25 @@ include "$include_path" . "inputFormWidget.php"; //base class for widgets that a
 include "$include_path" . "zmanim-admin.php";    //page in admin for "My Zmanim login info"
 include "$include_path" . "display_zman.php";    //shortcode function
 
+//globlal constatants 
+define('MAUS_DEFAULT_ZMAN_OPTION','Sunrise');  
+
 //Adds the functionality of connecting to a zmanim API and display zmanim-based comments
 class maus_Zmanim_Widget extends maus_InputForm_Widget{  
+    public $default_zman_option_code;
+    
     public function __construct() {
-        $this->default_zman_option="Sunrise"; //needed in case the zman_option index is empty when the output is created
+        $zmanapi=new maus_MyZmanim_API('','','',''); //create an instance to access the access the zmanim names array
+        $this->default_zman_option=MAUS_DEFAULT_ZMAN_OPTION; //needed in case the zman_option index is empty when the output is created
+        $this->default_zman_option_code=array_search("$this->default_zman_option",$zmanapi->requested_zman_output_array); //the myZmanim name of it 
         $widget_options = array( 'classname' => 'maus_Zmanim_widget', 'description' => 'Enter comments containing today\'s zmanim.  Each comment includes a zman from drop down list of zmanim.' );
         parent::__construct( 'zmanim_widget', 'Zmanim Widget', $widget_options );
     }
     
     // Create the admin area widget settings form.
     // form() function
-    public function form( $instance ) {
+    public function form( $instance ) { 
+        $zmanapi=new maus_MyZmanim_API('','','',''); //create an instance to access the access the zmanim names array
         $total_comments = !empty( $instance['total_comments'] ) ? $instance['total_comments'] : 1;
         $current_comment = !empty( $instance['current_comment'] ) ? $instance['current_comment'] : 1;
         $title = ! empty( $instance['title'] ) ? $instance['title'] : 'Title text';
@@ -61,8 +69,8 @@ class maus_Zmanim_Widget extends maus_InputForm_Widget{
        
         $text_before_zman = ! empty( $instance["text_before_zman$current_comment"] ) ? $instance["text_before_zman$current_comment"] : 'before text';
         $text_after_zman = ! empty( $instance["text_after_zman$current_comment"] ) ? $instance["text_after_zman$current_comment"] : 'after text';
-        $zman_options = !empty( $instance["zman_options$current_comment"] ) ? $instance["zman_options$current_comment"] : 'SunriseDefault';
-        
+        $zman_option = !empty( $instance["zman_option$current_comment"] ) ? $instance["zman_option$current_comment"] : $this->default_zman_option_code; 
+        echo $zman_option;
         //Create the form output
         echo "<p>"; //The form info should be in a <p> tag.
         $this->makeTextInput("title","Enter the Title to appear to the user:",$title);
@@ -78,8 +86,7 @@ class maus_Zmanim_Widget extends maus_InputForm_Widget{
             $this->makeTextInput("text_before_zman$current_comment","Enter the text to appear before the selected zman.",$text_before_zman);
 
             //Give the admin the abiltliy to set the zman he desires
-            $zmanapi=new maus_MyZmanim_API('','','',''); //create an instance to access the access the zmanim names array
-            $this->makeSelectInput("zman_options$current_comment","Choose a Zman",$zman_options,$zmanapi->requested_zman_output_array);
+            $this->makeSelectInput("zman_option$current_comment","Choose a Zman",$zman_option,$zmanapi->requested_zman_output_array);
             echo "<br>"; //put an extra line break here
                 
             $this->makeTextInput("zipcode","Zip Code for the place of the requested Zman",$zipcode); //<!--note the zipcode is one for all comments-->
@@ -89,6 +96,9 @@ class maus_Zmanim_Widget extends maus_InputForm_Widget{
             echo "<a class='btn btn-primary' href='?action=add'>Add New</a>&nbsp";
             echo "<a class='btn btn-primary' href='?action=previous'>Edit Previous</a>&nbsp";
             echo "<a class='btn btn-primary'  href='?action=next'>Edit Next</a>";
+//            echo "<form method=post>";  //eventually use this code to use post instead of passing information through the url
+//            echo "<a class='btn btn-primary' name="test'' href='#'>test</a>";
+            
             echo "</p>";     
         } //close the else statement
     } //close the form function
@@ -103,7 +113,7 @@ class maus_Zmanim_Widget extends maus_InputForm_Widget{
         $instance[ 'total_comments' ] = strip_tags( $new_instance[ 'total_comments' ] );
         $instance[ "text_before_zman$current_comment" ] = strip_tags( $new_instance[ "text_before_zman$current_comment" ] );
         $instance[ "text_after_zman$current_comment" ] = strip_tags( $new_instance[ "text_after_zman$current_comment" ] );
-        $instance[ "zman_options$current_comment" ] = strip_tags( $new_instance[ "zman_options$current_comment" ] );  
+        $instance[ "zman_option$current_comment" ] = strip_tags( $new_instance[ "zman_option$current_comment" ] );  
         $instance[ 'zipcode' ] = strip_tags( $new_instance[ 'zipcode' ] ); 
         
         return $instance;
@@ -139,11 +149,11 @@ class maus_Zmanim_Widget extends maus_InputForm_Widget{
                 $text_before_zman=$instance["text_before_zman$i"];
                 $text_after_zman=$instance["text_after_zman$i"];
                 
-                //set the zman option to the desired selection. If empty then use the default option. 
-                if (array_key_exists("zman_options$i", $instance) && $instance["zman_options$i"]!='') { 
-                    $zman_option=$instance["zman_options$i"]; 
+                //set the zman option to the desired selection. If empty then use the default option.  I don't know why its empty of = '' sometimes...
+                if (array_key_exists("zman_option$i", $instance) && $instance["zman_option$i"]!='') { 
+                    $zman_option=$instance["zman_option$i"]; 
                 }else{ //set the option to the default_zman_option
-                    $zman_option=array_search("$this->default_zman_option",$zmanimAPI->requested_zman_output_array); 
+                    $zman_option=$this->default_zman_option_code; 
                 }
                 $output .= $text_before_zman . " " . $this->formatZman($zmanimAPI->zman["$zman_option"]) ." <br>". $text_after_zman . "<br><br>" ;
             }            

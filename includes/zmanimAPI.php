@@ -5,7 +5,7 @@ class maus_Zmanim_API{
                                          //should be set in the inheriting class.  
                                          //The assocciative names are be the api's names for the zmanim and the values
                                          //are the names to be displayed to the user.
-            $time,$zman,$place; //arrays for zmanim data of the requested location 
+            $time,$zman,$place,$default_zman_option; //arrays for zmanim data of the requested location 
     
     protected $user,$key,$endpoint; //to store the username and password and url of the zmanim api
     
@@ -30,14 +30,15 @@ class maus_Zmanim_API{
     public function get_transients() {
          global $wpdb;
 
-         $sql = "SELECT * FROM $wpdb->options WHERE option_name LIKE '%\_transient\_%' AND option_name NOT LIKE '%\_transient\_timeout%'";
+         $sql = "SELECT * FROM $wpdb->options WHERE option_name LIKE '%\_transient\_%' AND option_name NOT LIKE '%\_transient\_timeout%'
+                                                AND option_name LIKE '%maus_zmanim_zipcode%'";
          $sql .= " ORDER BY option_id DESC;";
          $transients = $wpdb->get_results( $sql );
          return $transients;
 	}
     
     public function get_transient_name( $transient ) {
-		$length = false !== strpos( $transient->option_name, 'site_transient_' ) ? 16 : 11;
+		$length = false !== strpos( $transient->option_name, 'site_transient_' ) ? 16 : 30;
 		return substr( $transient->option_name, $length, strlen( $transient->option_name ) );
 	}
     

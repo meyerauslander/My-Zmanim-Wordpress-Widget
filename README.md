@@ -8,7 +8,7 @@ I wrote this plugin as an exercise creating wordpress widget that accepts a vari
 Download this repo as a zip and install like any other WP plugin
 
 # Setup
-1. Go To the "Admin Dashboard".  Then select the "My Zmanim login info" screen under the   "Settings" Menu.
+1. Go To the "Admin Dashboard".  Then select the "Zmanim Information Manager" screen under the "Settings" Menu.
 2. Enter your user Id and Key.  Clicking "save" will cause your information to be validated and saved to the database.  Don’t proceed to the next step unless your information is confirmed to be valid.
 3. Add a My Zmanim Widget to your site. Now you’re ready to enter as many comments as you want!  You will also have the ability to use the "display_zmanim” Shortcode function upon the validation of your user information (even if you don’t add a My Zmanim Widget to your site).  
 
@@ -18,7 +18,12 @@ Download this repo as a zip and install like any other WP plugin
     * To add your next comment, click on "Add New".  To view or edit a previous comment, click on "Edit Previous" etc.  
     * Be sure to save your changes before clicking to a different comment. 
 * display_zmanim Shortcode function
-	* use the following format:  for example [display_zmanim zip="44122" zman="SunriseDefault" offset=0].  See includes/myZmanimAPI.php for names of other Zmanim.  “offset” is a whole number of minutes to be added to the requested zman (it can be negative).
+	* Use the following format:  for example [display_zmanim zip="44122" zman="SunriseDefault" offset=0].  See includes/myZmanimAPI.php for names of other Zmanim.  “offset” is a whole number of minutes to be added to the requested zman (it can be negative).
+* Transient Management
+    * Go To the "Admin Dashboard".  Then select the "Zmanim Information Manager" screen under the "Settings" Menu (The same screen as in step 1 of setup).
+    * Chose the transient to delete from the dropdown menu.
+    * Click on "Delete Transient".  You should receive a message telling you if it was successfully deleted or not.
+    
 # Dependencies
 My Zmanim API needs files "php_soap.dll" and "php_openssl.dll" they may need to be enabled in the php.ini by your server systems administrator.  The "My Zmanim login info" screen automatically tells the user whether these files are enabled or not.
 
@@ -29,7 +34,8 @@ My Zmanim API needs files "php_soap.dll" and "php_openssl.dll" they may need to 
 4. Push to the branch (`git push origin feature/fooBar`)
 5. Create a new Pull Request
 
-# Credits
+# Credit
 * The text input and output functionality of the widget was implemented based on a plugin named "Example Widget Plugin" written by Jon Penland (See https://github.com/jpen365/example-widget-plugin/releases/tag/1.0 for its source code or accesses it from the "sources" folder of the repository in example-widget-plugin.php.)
 * The API call to My Zmanim was based on the example I downloaded from their website: https://www.myzmanim.com/apidemo.aspx.  Or access it from the “sources” folder of the repository in Example.php.
-* The "My Zmanim login info" screen was implemented based on a plugin written by TreeStone Media Group LLC named “WP-Mag-attributes” (See https://github.com/treestonemedia/WP-Mag-attributes/admin/ in the file named “magento-admin.php”.  Or access it from the “sources” folder of this repository.)
+* The "Zmanim Information Manager" screen was implemented based on a plugin written by TreeStone Media Group LLC named “WP-Mag-attributes” (See https://github.com/treestonemedia/WP-Mag-attributes/admin/ in the file named “magento-admin.php”.  Or access it from the “sources” folder of this repository.)
+* The Transient Management functionality was implemented based on a plugin named “Transient Manager” written by Pippen Williamson.  So too the code organization for the entire "Zmanim Information Manager" screen was partially based on this plugin (See https://wordpress.org/plugins/transients-manager/ or access it from the “sources” folder of this repository.)
