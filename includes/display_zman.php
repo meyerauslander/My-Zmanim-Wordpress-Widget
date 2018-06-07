@@ -3,7 +3,7 @@
 //for example [display_zmanim zip="44122" zman="SunsetDefault" offset=-20]
 //see myZmanimAPI.php for list of zmanim to choose from
 function display_zmanim($input) {
-    $invalid_info_message="Error in display_zmanim shortcode function<br>";
+    $invalid_info_message="<br><br>Error in display_zmanim shortcode function<br><br>";
     if (get_option('zman_status')=="Validated"){
         $zmantext='';    
         $zipcode=$input['zip'];
@@ -18,7 +18,7 @@ function display_zmanim($input) {
         $zmanimAPI->getZmanim("$zipcode");
         
         //set the output with the requested zman 
-        $zmantext .= maus_InputForm_Widget::formatZman($zmanimAPI->zman["$zman"],$offset);
+        $zmantext .= maus_InputForm_Widget::formatZman( $zmanimAPI->zman["$zman"], $offset );
     } else $zmantext=$invalid_info_message;
     return $zmantext; 
 } //end display_zmanim function

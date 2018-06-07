@@ -5,18 +5,19 @@
 class maus_InputForm_Widget extends WP_Widget{ 
     
     //example call: $this->makeTextInput("title","enter title here","Important Accouncement");
-    protected function makeTextInput($name,$label,$value){
-        $this->makeLabelForInput($name,$label);
-        echo "<input type='text' id='" . $this->get_field_id("$name") . 
+    protected function makeTextInput($name,$label,$value,$type="text"){
+        if ($type != "hidden") $this->makeLabelForInput($name,$label); 
+        echo "<input type='$type' id='" . $this->get_field_id("$name") . 
              "' name='" . $this->get_field_name("$name") . 
              "' value='" . esc_attr( $value ) . 
-             "' /><br>";
+             "' />";
+        if ($type != "hidden") echo "<br>"; 
     }
      
     //example call: $this->makeSelectInput("some_options","Choose an Options","select this",$array);
     protected function makeSelectInput($name,$lable,$selectMe,$selectionArray){
         $this->makeLabelForInput($name,$lable);
-        echo "<br><select name='" . $this->get_field_name("$name");
+        echo "<br><select name='" . $this->get_field_name("$name") . "'>";
         echo "<option value=''>Select Options</option>";
         foreach ($selectionArray as $key => $value) {
              $selected=($key==$selectMe) ? "selected":'';

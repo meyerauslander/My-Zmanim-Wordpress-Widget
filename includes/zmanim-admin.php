@@ -87,7 +87,13 @@ class maus_zmanim_info_manager {
             } elseif ( $_GET['status'] == 'error' && $_GET['request']=='validate' ) {
                 ?>
                 <div id="message" class="updated  error notice is-dismissible">
-                    <p><?php _e( "Couldn't connect to " . get_option( 'zman_url' ) . " Message was: " . $_GET['error_message'], "zmanim-api" ); ?></p>
+                    <?php //trim the \ out of the error message and replace '<' and '>' with their html entities
+                        $mess = $_GET['mess'];
+                        $mess = str_replace( '\\' , ''      , $mess );
+                        $mess = str_replace( '<'  , '&lt;'  , $mess );
+                        $mess = str_replace( '>'  , '&gt;'  , $mess );
+                    ?>
+                    <p><?php _e( "Couldn't connect to " . get_option( 'zman_url' ) . " Message was: " . $mess, "zmanim-api" ); ?></p>
                     <button type="button" class="notice-dismiss">
                         <span class="screen-reader-text"><?php _e( "Dismiss this notice.", "zmanim-api" ); ?></span>
                     </button>
@@ -172,16 +178,15 @@ class maus_zmanim_info_manager {
             } else{
                 _e("There are currently no transients saved.", "zmanim-api");
             }
-            ?>    
+            ?>   
+            <br><br><a href="<?php echo get_bloginfo( "url" ); ?>">Visit Site</a>
+             
         </form>
         <?php
     } //end of adminUI function
 
     //seve the entered information and vailidate it through the My zmanim API
     public function save_settings() {
-        //echo "Got in"; 
-//        echo "<script>alert('Got in');</script>";
-//        exit;
         // Get the options that were sent
         $url     = ( ! empty( $_POST["zman_url"] ) ) ? $_POST["zman_url"] : null;
         $apiuser = ( ! empty( $_POST["zman_api_user"] ) ) ? $_POST["zman_api_user"] : null;
@@ -201,7 +206,8 @@ class maus_zmanim_info_manager {
             // The ?page=maus-zmanim-manager corresponds to the "slug"
             // set in the fourth parameter of add_submenu_page() above.
             update_option('zman_status',"Invalid",true);
-            $redirect_url = get_bloginfo( "url" ) . "/wp-admin/options-general.php?page=maus-zmanim-manager&request=validate&status=error&message=" . $fault->faultstring;
+            echo "<script> alert(\"$fault->faultstring\");</script>"; 
+            $redirect_url = get_bloginfo( "url" ) . "/wp-admin/options-general.php?page=maus-zmanim-manager&request=validate&status=error&mess=" . $fault->faultstring;
             header( "Location: " . $redirect_url );
             exit;
         }
@@ -210,8 +216,7 @@ class maus_zmanim_info_manager {
             //echo "<script>alert('$result');</script>";
             //Redirect back to settings page
             update_option('zman_status',"Invalid",true);
-            echo "<script> alert('The result was {$result}');</script>"; 
-            $redirect_url = get_bloginfo( "url" ) . "/wp-admin/options-general.php?page=maus-zmanim-manager&request=validate&status=error&message=" . $result;
+            $redirect_url = get_bloginfo( "url" ) . "/wp-admin/options-general.php?page=maus-zmanim-manager&request=validate&status=error&mess=" . $result; 
             wp_safe_redirect(  $redirect_url );
             exit;
         }else{ //login success 
